@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>House Metrics Service</title>
+    <link rel="shortcut icon" href="media/monitoring.svg">
+    <!-- stylesheets -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+
+  <body>
+
+    <!-- Auth modals -->
+    <authentication-modal></authentication-modal>     
+
+    <!-- Add index modal -->
+    <index-record-form></index-record-form>  
+
+    <header>
+      <h2 class="small-screen-active">Hello <span class="userName">{user}</span></h2>
+      <navigation-menu></navigation-menu>
+    </header>
+
+    <div class="comZone hidden">This is the communication zone.</div>
+    
+    <section id="content">
+      <h2 class="small-screen-inactive">Hello <span class="userName">{user}</span></h2>
+      <ul class="small-screen-inactive">
+        <li class="about">Click on <a href="/index.html" class="startpage">Home</a> to come back on homepage.</li>
+        <li class="about">Click on <a href="/indexes.html">See indexes</a> to get a list of previous indexes.</li>
+        <li class="about">Click on <a href="/summary.html">Summary</a> to get an overview of all indexes.</li>
+        <li class="about">Click on <a class="save-indexes">Add index</a> to enter a new one.</li>
+        <li class="about">TODO - Click on <a class="save-prices">Save prices</a> to enter actual paid prices.</li>
+        <li class="about">TODO - Click on <a class="edit-profile">Edit profile</a> to edit User profile.</li>
+        <!-- <li class="about">Click on <a id="addBatchData" class="hidden">Add Batch Data</a> add full data.</li> -->
+      </ul>
+    </section>
+    
+  </body>
+
+  <script src="js/components.bundle.js"></script>
+  <script src="js/homepage.bundle.js"></script>
+
+</html>
