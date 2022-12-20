@@ -103,7 +103,6 @@ class IndexRecordController {
     // console.log("recordDraft from controller: ", recordDraft);
     indexesInputs.forEach(input => {
       if(input.type == "datetime-local") {
-        console.log(input);
         if(recordDraft[input.name] != undefined){
           let dateValue = formatDate(new Date(recordDraft[input.name])).split(' ').join("T");
           input.value = dateValue;
