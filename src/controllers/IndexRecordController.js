@@ -10,12 +10,6 @@ class IndexRecordController {
     this.insertRecordDataButton = document.querySelector('#insertDataButton');
     this.recordModel = new IndexRecordModel(token);
 
-    this.integerFields = ["elec_night", "water", "gaz", "elec_day"];
-
-    const [date, time] = formatDate(new Date()).split(' ');
-    this.date = date;
-    this.todayDate = date + 'T' + time;
-
     this.actionTitlePlaceholder = document.querySelector('#actionTitlePlaceholder');
 
     // Toggle insert-record modals
@@ -56,8 +50,8 @@ class IndexRecordController {
     const homeworkingInput = document.querySelector('#homeworkingInput');
     
     /* Programmatically set the date to today */
-    dateInput.value = dateInput.max = this.todayDate;
-    todayDatePlaceholder.textContent = this.date;
+    dateInput.value = dateInput.max = this.recordModel.todayDate;
+    todayDatePlaceholder.textContent = this.recordModel.date;
 
     /* Change title if date changes */
     dateInput.addEventListener('change', (e) => {
@@ -96,43 +90,25 @@ class IndexRecordController {
     insertDataButton.innerHTML = 'Save';
 
     var recordDraft = undefined;
-    // Try to fetch data based on recordId
+    // Try to fetch data based on recordId or get a dfrat with last values in it
     if(e !== undefined && e.value !== undefined){
       recordDraft = this.recordModel.getIndexRecord(e.value);
-    }
-    // Without recordId, try to fetch data from session
-    if(recordDraft == undefined && sessionStorage.getItem(this.recordModel.lastRecordStorage)){
-      recordDraft = JSON.parse(sessionStorage.getItem(this.recordModel.lastRecordStorage));
-      recordDraft.id = undefined;
-    }
-    // No record data, using last values to set in the form
-    if(recordDraft == undefined && sessionStorage.getItem(this.recordModel.recordsStorage)){
-      let records = JSON.parse(sessionStorage.getItem(this.recordModel.recordsStorage));
-      let dummyRecord = records[0];
-      recordDraft = dummyRecord;
-      for(let entry in dummyRecord){
-        if(this.integerFields.includes(entry)){
-          let values = this.recordModel.getValues(records, entry);
-          recordDraft[entry] = Math.max(...values);
-        }else{
-          recordDraft[entry] = "";
-        }
-      }
-      recordDraft.id = undefined;
-      recordDraft.date = this.todayDate;
+    }else{
+      recordDraft = this.recordModel.getIndexRecord(undefined,true);
     }
     // No data at all, using default values set in the form
     if(recordDraft == undefined){
       return;
     }
-    
+    // console.log("recordDraft from controller: ", recordDraft);
     indexesInputs.forEach(input => {
       if(input.type == "datetime-local") {
+        console.log(input);
         if(recordDraft[input.name] != undefined){
-          let dateValue = formatDate(new Date(recordDraft[input.name]));
+          let dateValue = formatDate(new Date(recordDraft[input.name])).split(' ').join("T");
           input.value = dateValue;
+          return;
         }
-        return;
       }
       if(input.type == "checkbox") {
         input.checked = recordDraft[input.name] ? recordDraft[input.name] : false;
@@ -143,10 +119,7 @@ class IndexRecordController {
         }
       }
     });
-
-    //this.setEvents();
-}
-
+  }
 }
 
 export { IndexRecordController };

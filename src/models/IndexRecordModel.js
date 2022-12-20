@@ -1,4 +1,4 @@
-import { sortDataByDate  } from "../utils";
+import { sortDataByDate, formatDate } from "../utils";
 import { apiConfig } from "../../config/apiConfig";
 
 class IndexRecordModel {
@@ -6,6 +6,13 @@ class IndexRecordModel {
     this.recordsStorage = apiConfig.storage.allRecords;
     this.lastRecordStorage = apiConfig.storage.lastRecord;
     this.updateRecordsStorage = apiConfig.storage.updateRecords;
+
+    this.indexFields = ["elec_night", "water", "gaz", "elec_day"];
+    this.integerFields = {"residents_home": 3, "residents_wash": "0", "homeworkers": 1};
+
+    const [date, time] = formatDate(new Date()).split(' ');
+    this.date = date;
+    this.todayDate = date + 'T' + time;
 
     this.record = {
       "gaz_heat_on":false,
@@ -51,7 +58,7 @@ class IndexRecordModel {
 
     insertDataButton.style.background = '#666666';
     insertDataButton.innerHTML = 'Saving data...';
-    //console.log(sessionStorage.getItem('user_id'));
+
     const userId = sessionStorage.getItem('user_id');
     dataToPush['user_id'] = userId;
 
@@ -118,18 +125,24 @@ class IndexRecordModel {
    * 
    * @param {*} id 
    */
-  getIndexRecord(recordId=undefined) {
-    //console.log("try to fetch record with id ",recordId);
+  getIndexRecord(recordId=undefined,draft=false) {
+    // console.log("try to fetch record with id ",recordId);
+    // No avalaible data
     if(!sessionStorage.getItem(this.recordsStorage)){
-        return undefined;
-    }
-    if(recordId == undefined){
       return undefined;
+    }
+    // No recordId and no draft wanted
+    if(recordId == undefined && !draft){
+      return undefined;
+    }
+    // Draft wanted
+    if(recordId == undefined && draft){
+      return this.setRecordDraft();
     }
 
     let records = JSON.parse(sessionStorage.getItem(this.recordsStorage));
     let results = records.filter(record => {
-        return record.id == recordId;
+      return record.id == recordId;
     });
 
     if(results.length == 0){
@@ -139,6 +152,35 @@ class IndexRecordModel {
     }else{
       return sortDataByDate(results, "desc")[0];
     }
+  }
+
+  setRecordDraft() {
+    var recordDraft = undefined;
+    // Using last values to set in the form
+    if(sessionStorage.getItem(this.recordsStorage)){
+      let records = JSON.parse(sessionStorage.getItem(this.recordsStorage));
+      let dummyRecord = records[0];
+      recordDraft = dummyRecord;
+
+      for(let entry in dummyRecord){
+        if(this.indexFields.includes(entry)){
+          let values = this.getValues(records, entry);
+          recordDraft[entry] = Math.max(...values);
+        }else if(Object.keys(this.integerFields).includes(entry)){
+          recordDraft[entry] = this.integerFields[entry];
+        }else{
+          recordDraft[entry] = "";
+        }
+      }
+      recordDraft.id = undefined;
+      recordDraft.date = new Date().valueOf();
+    }
+    // No avaliable records, try to fetch last record data from session
+    if(recordDraft == undefined && sessionStorage.getItem(this.recordModel.lastRecordStorage)){
+      recordDraft = JSON.parse(sessionStorage.getItem(this.recordModel.lastRecordStorage));
+      recordDraft.id = undefined;
+    }
+    return recordDraft;
   }
 
   getValues(data, field, castToInt=true, bool=false) {
