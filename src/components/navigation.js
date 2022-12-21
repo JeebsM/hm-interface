@@ -14,6 +14,7 @@ class NavigationMenu extends HTMLElement {
         <nav class="row">
         <div class="column">
           <a class="startpage" href="/index.html"><i class="material-icons icon">home</i>Home</a>
+					<a class="small-screen-active save-indexes"><i class="material-icons icon">add</i>Add index</a>
           <a href="/indexes.html"><i class="material-icons icon">format_list_bulleted</i>Records</a>
           <a href="/summary.html"><i class="material-icons icon">summarize</i>Summary</a>
 					<a class="sign-out"><i class="material-icons sign-out icon">logout</i>Out</a>
