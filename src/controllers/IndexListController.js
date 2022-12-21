@@ -1,5 +1,6 @@
 import { IndexRecordItem } from '../components/index-record-item.js';
 import { IndexListModel } from '../models/IndexListModel.js';
+import { WeatherTemperatureModel } from '../models/WeatherTemperatureModel.js';
 import { formatDate } from '../utils.js';
 
 class IndexListController {
@@ -8,6 +9,8 @@ class IndexListController {
     this.indexListModel = new IndexListModel(token);
     this.indexListModel.toggleUpdateRecordsStorage();
     this.indexListModel.fetchDataFromApi();
+
+    this.weatherWebservice = new WeatherTemperatureModel();
   }
 
   getRecords() {
@@ -18,15 +21,24 @@ class IndexListController {
     return this.indexListModel.getLastRecord();
   }
 
+  getOutsideTemperatures() {
+    return this.weatherWebservice.getOutsideTemperatures();
+  }
+
   render(records) {
     let recordsSorted = this.indexListModel.sortRecordsByDate(records);
+    let outsideTemperatures = this.weatherWebservice.getOutsideTemperatures();
+    
     const recordsListZone = document.querySelector('#content');
     var recordsList = document.createElement("div");
         recordsList.classList.add('record');
     recordsSorted.forEach(log => {
+      let date = formatDate(new Date(log.date),true);
       let indexLog = document.createElement('index-record-item');
-          indexLog.setAttribute('date', formatDate(new Date(log.date),true));
+          indexLog.setAttribute('date', date);
           indexLog.setAttribute('temperature', log.temperature);
+          indexLog.setAttribute('min_out_temperature', outsideTemperatures?.[date]?.min);
+          indexLog.setAttribute('max_out_temperature', outsideTemperatures?.[date]?.max);
           indexLog.setAttribute('id', log.id);
           indexLog.setAttribute('elec_day', log.elec_day);
           indexLog.setAttribute('elec_night', log.elec_night);

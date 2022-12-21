@@ -18,7 +18,7 @@ class IndexRecordItem extends HTMLElement {
 		this.innerHTML = /* html */ `
 				<details>
 					<summary>
-							<span class="record-title">Record from ${this.date}: ${this.temperature} °C</span>
+							<span class="record-title">Record from ${this.date}</span>
 							<a class="edit-record" recordId="${this.id}">Edit record</a>
 					</summary>
 					<p>
@@ -36,6 +36,11 @@ class IndexRecordItem extends HTMLElement {
 							<span><i class="material-icons">local_fire_department</i> ${this.wood_heat_on}</span>
 							<span><i class="material-icons">fireplace</i> ${this.gaz_heat_on}</span>
 					</p>
+					<p>
+						<span><i class="material-icons">device_thermostat</i><i class="material-icons">home</i> ${this.temperature}</span>
+						<span><i class="material-icons">device_thermostat</i><i class="material-icons">ac_unit</i> ${this.min_out_temperature}</span>
+						<span><i class="material-icons">device_thermostat</i><i class="material-icons">sunny</i> ${this.max_out_temperature}</span>
+					</p>
 				</details>
         `;
 		//console.log('connected!', this);
@@ -49,24 +54,32 @@ class IndexRecordItem extends HTMLElement {
 	}
 
 	get date() {
-        return this.getAttribute('date') || '';
-    }
+		return this.getAttribute('date') || '';
+	}
 
 	get temperature() {
-        return this.getAttribute('temperature') || '';
-    }
+		return `${this.getAttribute('temperature')} °C` || '- °C';
+	}
+
+	get min_out_temperature() {
+		return `${this.getAttribute('min_out_temperature')} °C` || '- °C';
+	}
+
+	get max_out_temperature() {
+	return `${this.getAttribute('max_out_temperature')} °C` || '- °C';
+	}
 
 	get id() {
-			return this.getAttribute('id') ||'';
+		return this.getAttribute('id') ||'';
 	}
 
 	get elec_day() {
-        return this.getAttribute('elec_day') || '';
-    }
+		return this.getAttribute('elec_day') || '';
+	}
 
 	get elec_night() {
-        return this.getAttribute('elec_night') || '';
-    }
+		return this.getAttribute('elec_night') || '';
+	}
 
 	get gaz() {
 		return this.getAttribute('gaz') ||'';

@@ -5,11 +5,12 @@ class IndexListModel {
   constructor(token) {
 
     this.token = token;
+    this.apiRoute = apiConfig.apiRoute.records;
 
     this.recordsStorage = apiConfig.storage.allRecords;
     this.lastRecordStorage = apiConfig.storage.lastRecord;
     this.updateRecordsStorage = apiConfig.storage.updateRecords;
-    this.apiRoute = apiConfig.apiRoute.records;
+    this.outsideTemperaturesStorage = apiConfig.storage.outsideTemperatures;
 
   }
 
