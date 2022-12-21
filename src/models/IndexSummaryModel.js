@@ -1,4 +1,4 @@
-import { formatDate, emitMessage } from '../utils.js';
+import { formatDate, emitMessage, sortDataByDate } from '../utils.js';
 
 class IndexSummaryModel {
     constructor() {
@@ -43,12 +43,31 @@ class IndexSummaryModel {
         }
     }
 
-    getSummary(data) {
+    getSummary(data, range="all") {
         /* Data preparation */
-        this.data = data ? data : [];
+        this.data = data ? sortDataByDate(data) : [];
         this.data = this.addDateStringToRecords();
         this.data = this.consolidateDataByDay();
+        // console.log("before sort and filter", this.data);
+        if(range != "all"){
+            this.data = sortDataByDate(data,'desc').slice(0,parseInt(range));
+        }
+        // console.log("after sort and filter", this.data);
+        return this.computeSummary();
+    }
 
+    getMonthSummary(data, month="01", year) {
+        /* Data preparation */
+        this.data = data ? sortDataByDate(data) : [];
+        this.data = this.addDateStringToRecords();
+        this.data = this.consolidateDataByDay();
+        // console.log("before sort and filter", this.data);
+        this.data = this.data.filter(record => parseInt(record.dateString.split("-")[1]) === parseInt(month) && parseInt(record.dateString.split("-")[0]) === parseInt(year));
+        // console.log("after sort and filter", this.data);
+        return this.computeSummary();
+    }
+
+    computeSummary() {
         const dates = this.getValues('date',false,false);
         const temperatures = this.getValues('temperature');
         const homeworkers = this.getValues('homeworkers');

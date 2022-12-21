@@ -6,14 +6,19 @@ class IndexSummaryController {
         this.summaryProcessor = new IndexSummaryModel();
     }
 
-    getSummary(records) {
-      return this.summaryProcessor.getSummary(records);
+    getSummary(records, range) {
+      return this.summaryProcessor.getSummary(records, range);
     }
 
-    render(summary, placeholder) {
+    getMonthSummary(records, month, year) {
+        return this.summaryProcessor.getMonthSummary(records, month, year);
+    }
+
+    render(summary, placeholder, period) {
         //console.log(summary);
+        let periodString = period ? `Report for ${period} (${summary.entry})` : `Report on ${summary.entry} entries`;
         placeholder.innerHTML = `
-            <h3>Report on ${summary.entry} entries (avg ${summary.home.temperature} °C)</h3>
+            <h4>${periodString} (avg ${summary.home.temperature} °C)</h4>
             <dl>
                 <dt>HOME: ${summary.home.residents} residents</dt>
                 <dd>
