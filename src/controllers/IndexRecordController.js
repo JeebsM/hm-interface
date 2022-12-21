@@ -73,8 +73,8 @@ class IndexRecordController {
     this.insertRecordDataButton.addEventListener('click', this.recordModel.saveRecord);
     this.insertRecordDataButton.token = this.token;
     this.insertRecordDataButton.apiRoute = this.apiRoute;
-    this.insertRecordDataButton.addRecord = this.addRecord;
-    this.insertRecordDataButton.editRecord = this.editRecord;
+    this.insertRecordDataButton.addRecord = this.recordModel.addRecord;
+    this.insertRecordDataButton.editRecord = this.recordModel.editRecord;
   }
 
   unsetEvents() {

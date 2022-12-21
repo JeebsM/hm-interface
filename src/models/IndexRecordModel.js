@@ -1,4 +1,4 @@
-import { sortDataByDate, formatDate } from "../utils";
+import { sortDataByDate, formatDate, emitMessage } from "../utils";
 import { apiConfig } from "../../config/apiConfig";
 
 class IndexRecordModel {
@@ -64,7 +64,7 @@ class IndexRecordModel {
 
     const data = JSON.stringify(dataToPush);
     const recordId = (dataToPush.hasOwnProperty('id') && dataToPush.id != "") ? dataToPush.id : false;
-    // console.log(data, token, apiRoute, recordId);
+    // console.log(data, token, apiRoute, recordId, e);
     // console.log(`User ${token} try to add data from ${apiRoute}`);
     // return;
     if(!recordId) {
