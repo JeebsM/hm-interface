@@ -45,7 +45,7 @@
     }
 
     /* content styles */
-    #content{
+    #content,#content_period,#content_month{
         max-width: 600px;
         margin: 10px auto 0;
     }
@@ -158,12 +158,14 @@
 
     /* statistics zoomer */
     .statistics_zoomer ul {
+        max-width: 90%;
+        text-align: center;
         display:flex; 
         flex-direction: row; 
         justify-content: space-between; 
         align-items: center;
         list-style-type: none;
-        margin: 2px;
+        margin: auto;
         padding: 0;
         overflow: hidden;
         background-color: #555;
