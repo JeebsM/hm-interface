@@ -48,10 +48,12 @@ class IndexListModel {
     })
     .then(response => response.json())
     .then(data => {
-        sessionStorage.setItem(this.recordsStorage, JSON.stringify(data));
-        let lastRecord = this.sortRecordsByDate(data, "desc")[0];
-        sessionStorage.setItem(this.lastRecordStorage, JSON.stringify(lastRecord));
-        this.toggleUpdateRecordsStorage();
+      // console.log("fetching data", data);
+      sessionStorage.setItem(this.recordsStorage, JSON.stringify(data));
+      let lastRecord = this.sortRecordsByDate(data, "desc")[0];
+      sessionStorage.setItem(this.lastRecordStorage, JSON.stringify(lastRecord));
+      this.toggleUpdateRecordsStorage();
+      return data;
     });
   }
 
