@@ -45,10 +45,10 @@ class IndexRecordModel {
     
     let dataToPush = {};
     indexesInputs.forEach(input => {
-        let [inputName, inputValue] = 
-            input.type == "checkbox" ? [input.name, input.checked] : [input.name, input.value];
-        inputValue = inputName == "date" ? new Date(input.value).valueOf() : inputValue;
-        dataToPush[inputName] = inputValue;
+      let [inputName, inputValue] = 
+          input.type == "checkbox" ? [input.name, input.checked] : [input.name, input.value];
+      inputValue = inputName == "date" ? new Date(input.value).valueOf() : inputValue;
+      dataToPush[inputName] = inputValue;
     });
 
     if(sessionStorage.getItem('user_id') == null){
@@ -61,10 +61,11 @@ class IndexRecordModel {
 
     const userId = sessionStorage.getItem('user_id');
     dataToPush['user_id'] = userId;
+    dataToPush['homeworking'] = parseInt(dataToPush['homeworkers']) > 0 ? true : false;
 
     const data = JSON.stringify(dataToPush);
     const recordId = (dataToPush.hasOwnProperty('id') && dataToPush.id != "") ? dataToPush.id : false;
-    // console.log(data, token, apiRoute, recordId, e);
+    // console.log(dataToPush, data, token, apiRoute, recordId, e);
     // console.log(`User ${token} try to add data from ${apiRoute}`);
     // return;
     if(!recordId) {
