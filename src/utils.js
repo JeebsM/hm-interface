@@ -70,4 +70,8 @@ function sortDataByDate(data, type="desc") {
     return data.sort((a, b) => (a.date > b.date) ? 1 : -1);
 }
 
-export {padTo2Digits, formatDate, emitMessage, getRecordWithId, sortDataByDate}
+function delay(time) {
+    return new Promise(resolve => setTimeout(resolve, time));
+}
+
+export {padTo2Digits, formatDate, emitMessage, getRecordWithId, sortDataByDate, delay}

@@ -2,7 +2,7 @@ import { GateKeeper } from '../gatekeeper.js';
 import { IndexSummaryController } from '../controllers/IndexSummaryController.js';
 import { IndexListController } from '../controllers/IndexListController.js';
 import { auth } from '../../config/firebaseConfig.js';
-import { emitMessage } from '../utils.js';
+import { emitMessage, delay } from '../utils.js';
 
 /* Contain all authentication logic */
 const authTools = new GateKeeper(auth);
@@ -10,8 +10,18 @@ const summaryPlaceholer = document.querySelector('#content_period');
 const summaryMonthPlaceholer = document.querySelector('#content_month');
 const fullDataFilterLink = document.querySelector('#all_query');
 
-if(sessionStorage.getItem('user_token')){
+/* Waiting for authentication */
+const waitTime = 1500;
+const noWaitTime = 10;
+var timeToWait = waitTime;
 
+if(sessionStorage.getItem('user_token')){
+  timeToWait = noWaitTime;
+}else{
+  emitMessage("Connecting to service.", "#d61007");
+}
+
+delay(timeToWait).then(() => {
   let token = sessionStorage.getItem('user_token');
   /* Contain entry of indexes logic */
   const indexList = new IndexListController(token);
@@ -70,7 +80,4 @@ if(sessionStorage.getItem('user_token')){
 
     });
   });
-  // summary.setEvents();
-}else{
-  // summary.unsetEvents();
-}
+});
